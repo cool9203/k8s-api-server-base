@@ -1,4 +1,34 @@
+import kubernetes.client
+from kubernetes.client.rest import ApiException
+from kubernetes import client, config
+import six
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class KUBEAPI():
+    def __init__(self):
+        configuration = kubernetes.client.Configuration()
+        configuration.host = "http://10.96.0.1"
+        self.api_client = kubernetes.client.ApiClient(configuration)
+        config.load_incluster_config()
+        logger.debug("kubeapi init finish")
+
+
+    def get_all_pod(self):
+        """
+        ret = self.api_client.call_api("/api/v1/pods", "GET")
+        for i in ret.items:
+            logger.debug("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
+        """
+        v1 = client.CoreV1Api()
+        ret = v1.list_pod_for_all_namespaces(watch=False)
+        for i in ret.items:
+            print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
+
+
     def __call_api(self, **kwargs):
         #this function reference kubernetes/client/api/core_v1_api.py implement connect_post_namespaced_service_proxy_with_path_with_http_info function on k8s github
         local_var_params = locals()

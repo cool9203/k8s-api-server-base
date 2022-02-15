@@ -1,3 +1,4 @@
 from pkg import kubeapi
 
-kubeapi.test()
+kubeapi = kubeapi.KUBEAPI()
+kubeapi.get_all_pod()
