@@ -1,0 +1,2 @@
+#註解
+logging_config_path=./setting/logging-config.yaml

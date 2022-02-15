@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-server-base
+  labels:
+    app: api-server-base
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-server
+  template: 
+    metadata:
+      labels:
+        app: api-server
+    spec:
+      containers:
+      - name: api-server
+        image: yogawulala/k8s-api-server-base
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "2"
+            memory: "1024M"
+        command: ["python"]
+        args: ["./main.py"]
+        volumeMounts:
+          - name: log-dir
+            mountPath: /log
+          - name: setting-dir
+            mountPath: /setting
+          - name: src-dir
+            mountPath: /src
+      volumes:
+        - name: log-dir
+          hostPath:
+            type: DirectoryOrCreate
+            path: /etc/api-server-base/log
+        - name: setting-dir
+          hostPath:
+            type: DirectoryOrCreate
+            path: /etc/api-server-base/setting
+        - name: src-dir
+          hostPath:
+            type: DirectoryOrCreate
+            path: /etc/api-server-base/src
