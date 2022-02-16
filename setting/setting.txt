@@ -1,2 +1,8 @@
 #註解
 logging_config_path=./setting/logging-config.yaml
+ip=0.0.0.0
+port=8080
+develope=false
+debug=true
+master_api=["test"]
+worker_api=[]

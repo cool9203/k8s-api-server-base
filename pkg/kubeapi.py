@@ -5,29 +5,44 @@ import six
 
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("master.kubeapi")
 
 
-class KUBEAPI():
+class __kubeapi():
     def __init__(self):
-        configuration = kubernetes.client.Configuration()
-        configuration.host = "http://10.96.0.1"
-        self.api_client = kubernetes.client.ApiClient(configuration)
         config.load_incluster_config()
+        self.v1 = client.CoreV1Api()
         logger.debug("kubeapi init finish")
 
-
     def get_all_pod(self):
-        """
-        ret = self.api_client.call_api("/api/v1/pods", "GET")
-        for i in ret.items:
-            logger.debug("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
-        """
-        v1 = client.CoreV1Api()
-        ret = v1.list_pod_for_all_namespaces(watch=False)
-        for i in ret.items:
-            print("%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name))
+        data = dict()
+        ret = self.v1.list_pod_for_all_namespaces(watch=False)
+        for pod in ret.items:
+            data[pod.metadata.name] = {"pod_ip":pod.status.pod_ip, "namespace":pod.metadata.namespace}
+        return data
 
+    def __call_api_GET_example(self):
+        ret = self.v1.connect_get_namespaced_service_proxy_with_path("your_service_name", "kube-system", f"service_rul")
+
+    def __call_api_POST_example(self):
+        """
+        this example call api in curl:
+            curl --location \
+            --request POST 'http://{ip}:{port}/api/v1/namespaces/kube-system/services/{your_service_name}/proxy/{service_rul}' \
+            --header 'Content-Type: application/x-www-form-urlencoded' \
+            --data-urlencode '{params_key}={your_para}'
+        """
+        form_params = list()
+        for your_para in list():
+            form_params.append(("params_key", your_para))
+        ret = self.__call_api(
+            name="your_service_name",
+            namespace="kube-system",
+            path=f"service_rul",
+            header={"Content-Type": "application/x-www-form-urlencoded"},
+            method="POST",
+            form=form_params,
+            path2=None)
 
     def __call_api(self, **kwargs):
         #this function reference kubernetes/client/api/core_v1_api.py implement connect_post_namespaced_service_proxy_with_path_with_http_info function on k8s github

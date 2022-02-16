@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-server-base
+  namespace: kube-system
   labels:
     app: api-server-base
 spec:
@@ -14,24 +15,26 @@ spec:
       labels:
         app: api-server
     spec:
+      serviceAccountName: api-server-base
       containers:
       - name: api-server
-        image: yogawulala/k8s-api-server-base
-        ports:
-        - containerPort: 80
+        image: yogawulala/k8s-api-server-base:latest
+        imagePullPolicy: Never #Always
         resources:
           requests:
             cpu: "2"
             memory: "1024M"
         command: ["python"]
-        args: ["./main.py"]
+        args: ["/main.py"]
         volumeMounts:
           - name: log-dir
             mountPath: /log
           - name: setting-dir
             mountPath: /setting
-          - name: src-dir
-            mountPath: /src
+          - name: program-file
+            mountPath: /main.py
+          - name: pkg-dir
+            mountPath: /pkg
       volumes:
         - name: log-dir
           hostPath:
@@ -39,9 +42,14 @@ spec:
             path: /etc/api-server-base/log
         - name: setting-dir
           hostPath:
-            type: DirectoryOrCreate
+            type: Directory
             path: /etc/api-server-base/setting
-        - name: src-dir
+        - name: program-file
           hostPath:
-            type: DirectoryOrCreate
-            path: /etc/api-server-base/src
+            type: File
+            path: /etc/api-server-base/src/master/main.py
+        - name: pkg-dir
+          hostPath:
+            type: Directory
+            path: /etc/api-server-base/pkg
+

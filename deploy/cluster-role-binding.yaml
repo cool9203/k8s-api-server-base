@@ -4,7 +4,7 @@ metadata:
   name: api-server-base-role-binding
 subjects:
 - kind: ServiceAccount
-  namespace: api-server-base
+  namespace: kube-system
   name: api-server-base
 roleRef:
   kind: ClusterRole

@@ -6,30 +6,32 @@ if [ ! $# == 1 ]; then
 fi
 
 if [ "$1" = "deploy" ]; then
-  kubectl apply -f deploy/namespace.yaml
   kubectl apply -f deploy/service-account.yaml
   kubectl apply -f deploy/cluster-role-binding.yaml
   kubectl apply -f deploy/master.yaml
   kubectl apply -f deploy/worker.yaml
   kubectl apply -f deploy/master-svc.yaml
+  cp -r ./setting /etc/api-server-base
+  cp -r ./src /etc/api-server-base
+  cp -r ./pkg /etc/api-server-base
 
 elif [ "$1" = "redeploy" ]; then
-  kubectl apply -f deploy/namespace.yaml
-  kubectl apply -f deploy/service-account.yaml
-  kubectl apply -f deploy/cluster-role-binding.yaml
-  kubectl apply -f deploy/master.yaml
-  kubectl apply -f deploy/worker.yaml
-  kubectl apply -f deploy/master-svc.yaml
-
-  kubectl delete -f deploy/namespace.yaml
   kubectl delete -f deploy/service-account.yaml
   kubectl delete -f deploy/cluster-role-binding.yaml
   kubectl delete -f deploy/master.yaml
   kubectl delete -f deploy/worker.yaml
   kubectl delete -f deploy/master-svc.yaml
 
+  kubectl apply -f deploy/service-account.yaml
+  kubectl apply -f deploy/cluster-role-binding.yaml
+  kubectl apply -f deploy/master.yaml
+  kubectl apply -f deploy/worker.yaml
+  kubectl apply -f deploy/master-svc.yaml
+  cp -r ./setting /etc/api-server-base
+  cp -r ./src /etc/api-server-base
+  cp -r ./pkg /etc/api-server-base
+
 elif [ "$1" = "uninstall" ]; then
-  kubectl delete -f deploy/namespace.yaml
   kubectl delete -f deploy/service-account.yaml
   kubectl delete -f deploy/cluster-role-binding.yaml
   kubectl delete -f deploy/master.yaml
