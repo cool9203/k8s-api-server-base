@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-server-base
+  name: api-server-base-master
   namespace: kube-system
   labels:
-    app: api-server-base
+    app: api-server-base-master
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api-server
+      app: api-server-base-master
   template: 
     metadata:
       labels:
-        app: api-server
+        app: api-server-base-master
     spec:
       serviceAccountName: api-server-base
       containers:
-      - name: api-server
+      - name: api-server-base-master
         image: yogawulala/k8s-api-server-base:latest
         imagePullPolicy: Never #Always
         resources:

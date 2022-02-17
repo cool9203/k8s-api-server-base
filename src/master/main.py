@@ -1,9 +1,8 @@
 from pkg import log
 from flask import Flask
 from flask_cors import CORS
-import ast
-import importlib
 from waitress import serve
+from pkg.api import master
 
 #load setting and get logger
 setting = log.load_setting("./setting/setting.txt")
@@ -12,6 +11,7 @@ logger = log.get_logger(setting=setting, name="master")
 
 def main():
     app = Flask(__name__)
+    app.logger = logger
     cors = CORS(app)
     app.config['CORS_HEADERS'] = "Content-Type"
     app.config['JSON_AS_ASCII'] = False
@@ -27,19 +27,10 @@ def main():
     logger.info(f"debug:{debug}")
 
     #dynamic load api
-    api_name_list = ast.literal(setting.get("MASTER_API", "[]"))
-
-    api_list = list()
-    for api_name in api_name_list:
-        try:
-            api = importlib.import_module(f"pkg.api.{api_name}")
-            api_list.append(api)
-            logger.info(f"load {api_name} finish.")
-        except Exception as e:
-            logger.warning(e)
-
-    for api in api_list:
-        api.add_url_rule(app)
+    try:
+        master.add_url_rule(app)
+    except Exception as e:
+        logger.error(e)
 
     #open flask server
     if (develope.lower() == "true"):
@@ -48,7 +39,6 @@ def main():
         else:
             app.run(host=ip, port=port, debug=True)
     elif (develope.lower() == "false"):
-        from waitress import serve
         serve(app, host=ip, port=port)
     else:
         logging.critical("api server not create.")

@@ -12,16 +12,16 @@ handlers:
         stream: ext://sys.stdout
     master:
         class: logging.FileHandler
-        level: INFO
+        level: DEBUG
         formatter: std
         filename: ./log/master.log
         mode: w
     worker:
         class: logging.FileHandler
-        level: INFO
+        level: DEBUG
         formatter: std
         filename: ./log/worker.log
-        mode: a
+        mode: w
 loggers:
     master:
         level: DEBUG

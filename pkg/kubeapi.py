@@ -14,6 +14,14 @@ class __kubeapi():
         self.v1 = client.CoreV1Api()
         logger.debug("kubeapi init finish")
 
+    def get_all_worker(self, worker_name):
+        all_pod_data = self.get_all_pod()
+        all_worker = dict()
+        for pod_name, data in all_pod_data.items():
+            if (worker_name in pod_name):
+                all_worker[pod_name] = data
+        return all_worker
+
     def get_all_pod(self):
         data = dict()
         ret = self.v1.list_pod_for_all_namespaces(watch=False)
