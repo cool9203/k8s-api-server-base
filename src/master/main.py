@@ -7,7 +7,7 @@ from pkg.api import master
 #load setting and get logger
 setting = log.load_setting("./setting.txt")
 logger = log.get_logger(setting=setting, name="master")
-
+logger.info(setting)
 
 def main():
     app = Flask(__name__)

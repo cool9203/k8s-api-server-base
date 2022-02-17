@@ -2,6 +2,7 @@ import logging
 logger = logging.getLogger()
 
 from flask import request
+import requests
 import json
 
 def get_request_data():
@@ -21,3 +22,14 @@ def get_request_data():
     logger.debug(f"get data : {data}")
     data = {k.upper():v for k, v in data.items()}
     return data
+
+
+def __call_api(api_url, method, data={}, headers = {"Content-Type": "application/json"}):
+    if (not method in ["POST", "GET"]):
+        raise Exception("method error")
+    
+    if (method == "POST"):
+        req = requests.post(api_url, data=json.dumps(data), headers=headers)
+    else:
+        req = requests.get(api_url)
+    return req.text
