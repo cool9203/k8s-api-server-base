@@ -1,6 +1,6 @@
 import importlib
 import logging
-logger = logging.getLogger(f"worker.{__name__}")
+logger = logging.getLogger(__name__)
 
 using_api_name_list = ["test"]
 
@@ -9,9 +9,8 @@ api_list = list()
 for api_name in using_api_name_list:
     try:
         api = importlib.import_module(f"pkg.api.{api_name}")
-        api.set_logger(logger)
         api_list.append(api)
-        logger.info(f"load {api_name} finish.")
+        logger.info(f"load api : {api.__name__}")
     except Exception as e:
         logger.error(e)
 

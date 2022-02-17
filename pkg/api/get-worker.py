@@ -5,8 +5,7 @@ import pkg.kubeapi
 import pkg.log
 import logging
 
-logger = logging.getLogger()
-util.logger = logger
+logger = logging.getLogger(__name__)
 kubeapi = pkg.kubeapi.__kubeapi()
 setting = pkg.log.load_setting("./setting.txt")
 
@@ -24,8 +23,3 @@ class get_worker(MethodView):
 def add_url_rule(app):
     _api = get_worker.as_view(f'get_worker')
     app.add_url_rule(f'/worker/<method>', view_func=_api, methods=["GET"])
-
-
-def set_logger(pass_logger):
-    logger = pass_logger
-    util.logger = logger

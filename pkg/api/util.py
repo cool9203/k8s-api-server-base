@@ -1,5 +1,5 @@
 import logging
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 from flask import request
 import requests
@@ -24,7 +24,7 @@ def get_request_data():
     return data
 
 
-def __call_api(api_url, method, data={}, headers = {"Content-Type": "application/json"}):
+def call_api(api_url, method, data={}, headers={"Content-Type": "application/json"}):
     if (not method in ["POST", "GET"]):
         raise Exception("method error")
     

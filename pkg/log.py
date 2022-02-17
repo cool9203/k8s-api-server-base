@@ -25,22 +25,22 @@ def load_setting(setting_path=""):
 
 def get_logger(**kwargs):
     params = locals()["kwargs"]
-    name = params.get("name", "root")
+    name = params.get("name")
+    logger_name = params.get("logger_name", "")
     log_level = params["log_level"] if "log_level" in params else params.get("setting", {"LOG_LEVEL":"INFO"})["LOG_LEVEL"]
 
-    logger = logging.getLogger(name)
+    logger = logging.getLogger(logger_name)
     logger.setLevel(logging.getLevelName(log_level))
-    if (not name is "root"):
-        formatter = logging.Formatter(log_fmt, datefmt=log_datefmt)
-        
-        handler = logging.StreamHandler()
-        handler.setLevel(logging.getLevelName(log_level))
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
+    formatter = logging.Formatter(log_fmt, datefmt=log_datefmt)
+    
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.getLevelName(log_level))
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
-        handler = logging.FileHandler(str(Path(log_path, f"{name}.log")), mode="w")
-        handler.setLevel(logging.getLevelName(log_level))
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
+    handler = logging.FileHandler(str(Path(log_path, f"{name}.log")), mode="w")
+    handler.setLevel(logging.getLevelName(log_level))
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
 
     return logger

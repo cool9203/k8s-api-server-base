@@ -1,12 +1,13 @@
 from pkg import log
+
+#load setting and get logger
+setting = log.load_setting("./setting.txt")
+logger = log.get_logger(setting=setting, name="worker", logger_name="")
+
 from flask import Flask
 from flask_cors import CORS
 from waitress import serve
 from pkg.api import worker
-
-#load setting and get logger
-setting = log.load_setting("./setting.txt")
-logger = log.get_logger(setting=setting, name="worker")
 
 
 def main():
