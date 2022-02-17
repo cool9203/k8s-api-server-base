@@ -11,7 +11,7 @@ if [ "$1" = "deploy" ]; then
   kubectl apply -f deploy/master.yaml
   kubectl apply -f deploy/worker.yaml
   kubectl apply -f deploy/master-svc.yaml
-  cp -r ./setting /etc/api-server-base
+  cp ./setting.txt /etc/api-server-base/setting.txt
   cp -r ./src /etc/api-server-base
   cp -r ./pkg /etc/api-server-base
 
@@ -27,7 +27,7 @@ elif [ "$1" = "redeploy" ]; then
   kubectl apply -f deploy/master.yaml
   kubectl apply -f deploy/worker.yaml
   kubectl apply -f deploy/master-svc.yaml
-  cp -r ./setting /etc/api-server-base
+  cp ./setting.txt /etc/api-server-base/setting.txt
   cp -r ./src /etc/api-server-base
   cp -r ./pkg /etc/api-server-base
 

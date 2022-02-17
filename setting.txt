@@ -2,6 +2,7 @@
 logging_config_path=./setting/logging-config.yaml
 ip=0.0.0.0
 port=8080
-develope=false
+develope=true
 debug=true
 worker_name=api-server-base-worker
+log_level=DEBUG     #other:DEBUG, INFO or WARNING

@@ -5,13 +5,12 @@ from waitress import serve
 from pkg.api import worker
 
 #load setting and get logger
-setting = log.load_setting("./setting/setting.txt")
+setting = log.load_setting("./setting.txt")
 logger = log.get_logger(setting=setting, name="worker")
 
 
 def main():
     app = Flask(__name__)
-    app.logger = logger
     cors = CORS(app)
     app.config['CORS_HEADERS'] = "Content-Type"
     app.config['JSON_AS_ASCII'] = False

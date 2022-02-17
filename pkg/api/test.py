@@ -4,6 +4,7 @@ from flask.views import MethodView
 import logging
 
 logger = logging.getLogger()
+util.logger = logger
 
 
 class __test(MethodView):
@@ -38,6 +39,6 @@ def add_url_rule(app):
     app.add_url_rule(f'/test/<method>', view_func=test_api, methods=["POST", "GET"])
 
 
-def set_logger(logger):
-    logger = logger
-    util.logger = logger()
+def set_logger(pass_logger):
+    logger = pass_logger
+    util.logger = logger
