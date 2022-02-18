@@ -16,20 +16,19 @@ class test_worker(MethodView):
     def get(self, method):
         if (not method in ["GET"]):
             return jsonify({"status":"unsuccess"})
-        #try:
-        all_worker = kubeapi.get_all_worker(setting["WORKER_NAME"])
-        for worker_name, spec in all_worker.items():
-            pod_ip = spec["pod_ip"]
-            logger.info(f"worker_name {worker_name} : {pod_ip}")
-            ret = util.call_api(f"http://{pod_ip}:8080/test/GET", "GET")
-            logger.info(f"{worker_name}:{ret}")
+        try:
+            all_worker = kubeapi.get_all_worker(setting["WORKER_NAME"])
+            for worker_name, spec in all_worker.items():
+                pod_ip = spec["pod_ip"]
+                logger.info(f"worker_name {worker_name} : {pod_ip}")
+                ret = util.call_api(f"http://{pod_ip}:8080/test/GET", "GET")
+                logger.info(f"{worker_name}:{ret}")
 
-        return jsonify({"status":"success", "data":all_worker})
-        """
+            return jsonify({"status":"success", "data":all_worker})
+        
         except Exception as e:
             logger.error(e)
             return jsonify({"status":"unsuccess"})
-        """
         
 
 def add_url_rule(app):

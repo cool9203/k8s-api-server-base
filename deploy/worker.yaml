@@ -19,7 +19,7 @@ spec:
       containers:
       - name: api-server-base-worker
         image: yogawulala/k8s-api-server-base:latest
-        imagePullPolicy: Never #Always
+        imagePullPolicy: Always
         securityContext:
           privileged: true
         ports:

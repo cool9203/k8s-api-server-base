@@ -1,5 +1,3 @@
-#註解
-logging_config_path=./setting/logging-config.yaml
 ip=0.0.0.0
 port=8080
 develope=true

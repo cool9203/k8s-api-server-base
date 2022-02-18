@@ -19,7 +19,7 @@ spec:
       containers:
       - name: api-server-base-master
         image: yogawulala/k8s-api-server-base:latest
-        imagePullPolicy: Never #Always
+        imagePullPolicy: Always
         resources:
           requests:
             cpu: "2"
