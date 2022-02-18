@@ -1,6 +1,6 @@
 # k8s-api-server-base
-this repo is a template of k8s api server.
-using a master to call worker in k8s cluster.
+this repo is a template of k8s api server.  
+using a master to call worker in k8s cluster.  
 
 # build and run
 ```sh
@@ -121,7 +121,7 @@ add `<name>.py` in [this](https://github.com/cool9203/k8s-api-server-base/tree/m
 add `<name>.py` to [master](https://github.com/cool9203/k8s-api-server-base/blob/master/pkg/api/master.py#L5) or [worker](https://github.com/cool9203/k8s-api-server-base/blob/master/pkg/api/worker.py#L5)
 
 ## step 3
-deploy in [see more](https://hackmd.io/RxWb6x51SR6H3lOaO7Azcg?both#build-and-run)
+deploy. [see more](https://hackmd.io/RxWb6x51SR6H3lOaO7Azcg?both#build-and-run)
 ```sh
 sudo ./run.sh run
 or
@@ -129,7 +129,7 @@ sudo ./deploy.sh redeploy
 ```
 
 ## step 4
-test [see more](https://hackmd.io/RxWb6x51SR6H3lOaO7Azcg?both#test)
+test. [see more](https://hackmd.io/RxWb6x51SR6H3lOaO7Azcg?both#test)
 
 # change flask run ip and port
 in ./k8s-api-server-base/setting.txt
@@ -138,5 +138,5 @@ if changed, you should change this file too.
 2. https://github.com/cool9203/k8s-api-server-base/blob/master/deploy/master-svc.yaml#L12
 
 # master call worker service example
-https://github.com/cool9203/k8s-api-server-base/blob/master/pkg/api/test-worker.py#L20-L25
-if change port, `8080` need edit to changed port.
+https://github.com/cool9203/k8s-api-server-base/blob/master/pkg/api/test-worker.py#L20-L25  
+if change port, `8080` need edit to changed port.  
