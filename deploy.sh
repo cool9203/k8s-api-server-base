@@ -1,22 +1,39 @@
 #!/usr/bin/env bash
 
-if [ ! $# == 1 ]; then
-  echo "Invalid parameter (must be \"deploy\", \"redeploy\" or \"uninstall\")"
+if [[ ($# == 0)  ||  ("$1" != "uninstall" && $# < 2) ]] ; then
+  echo "./deploy [deploy | redeploy [K8S_DATA_DIR]] | [uninstall]"
   exit
 fi
 
 K8S_DATA_DIR=/etc/api-server-base
 
 if [ "$1" = "deploy" ]; then
+  yq -i ".spec.template.spec.volumes[0].hostPath.path = \"${K8S_DATA_DIR}/log\"" deploy/master.yaml
+  yq -i ".spec.template.spec.volumes[1].hostPath.path = \"${K8S_DATA_DIR}/src/master/main.py\"" deploy/master.yaml
+  yq -i ".spec.template.spec.volumes[2].hostPath.path = \"${K8S_DATA_DIR}/pkg\"" deploy/master.yaml
+  yq -i ".spec.template.spec.volumes[3].hostPath.path = \"${K8S_DATA_DIR}/deploy\"" deploy/master.yaml
+
+  yq -i ".spec.template.spec.volumes[0].hostPath.path = \"${K8S_DATA_DIR}/log\"" deploy/worker.yaml
+  yq -i ".spec.template.spec.volumes[1].hostPath.path = \"${K8S_DATA_DIR}/src/worker/main.py\"" deploy/worker.yaml
+  yq -i ".spec.template.spec.volumes[2].hostPath.path = \"${K8S_DATA_DIR}/pkg\"" deploy/worker.yaml
+
   kubectl apply -f deploy/service-account.yaml
   kubectl apply -f deploy/cluster-role-binding.yaml
   kubectl apply -f deploy/master.yaml
   kubectl apply -f deploy/worker.yaml
   kubectl apply -f deploy/master-svc.yaml
-  cp -r ./src ${K8S_DATA_DIR}
-  cp -r ./pkg ${K8S_DATA_DIR}
+  sudo cp -r ./ ${K8S_DATA_DIR}
 
 elif [ "$1" = "redeploy" ]; then
+  yq -i ".spec.template.spec.volumes[0].hostPath.path = \"${K8S_DATA_DIR}/log\"" deploy/master.yaml
+  yq -i ".spec.template.spec.volumes[1].hostPath.path = \"${K8S_DATA_DIR}/src/master/main.py\"" deploy/master.yaml
+  yq -i ".spec.template.spec.volumes[2].hostPath.path = \"${K8S_DATA_DIR}/pkg\"" deploy/master.yaml
+  yq -i ".spec.template.spec.volumes[3].hostPath.path = \"${K8S_DATA_DIR}/deploy\"" deploy/master.yaml
+
+  yq -i ".spec.template.spec.volumes[0].hostPath.path = \"${K8S_DATA_DIR}/log\"" deploy/worker.yaml
+  yq -i ".spec.template.spec.volumes[1].hostPath.path = \"${K8S_DATA_DIR}/src/worker/main.py\"" deploy/worker.yaml
+  yq -i ".spec.template.spec.volumes[2].hostPath.path = \"${K8S_DATA_DIR}/pkg\"" deploy/worker.yaml
+
   kubectl delete -f deploy/service-account.yaml
   kubectl delete -f deploy/cluster-role-binding.yaml
   kubectl delete -f deploy/master.yaml
@@ -28,8 +45,7 @@ elif [ "$1" = "redeploy" ]; then
   kubectl apply -f deploy/master.yaml
   kubectl apply -f deploy/worker.yaml
   kubectl apply -f deploy/master-svc.yaml
-  cp -r ./src ${K8S_DATA_DIR}
-  cp -r ./pkg ${K8S_DATA_DIR}
+  sudo cp -r ./ ${K8S_DATA_DIR}
 
 elif [ "$1" = "uninstall" ]; then
   kubectl delete -f deploy/service-account.yaml
@@ -39,5 +55,5 @@ elif [ "$1" = "uninstall" ]; then
   kubectl delete -f deploy/master-svc.yaml
 
 else
-  echo "Invalid parameter: $1 (must be \"deploy\", \"redeploy\" or \"uninstall\")"
+  echo "./deploy [deploy | redeploy [K8S_DATA_DIR]] | [uninstall]"
 fi
