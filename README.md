@@ -6,11 +6,17 @@ using a master to call worker in k8s cluster.
 ```sh
 #path in ./k8s-api-server-base
 
-#build and deploy
-sudo ./run.sh run
+#build
+sudo ./run.sh build
 
-#only deploy
-sudo ./deploy.sh deploy
+#deploy
+sudo ./deploy.sh deploy <worker-dir>
+
+#redrploy
+sudo ./deploy.sh redeploy <worker-dir>
+
+#uninstall
+sudo ./deploy.sh uninstall
 ```
 
 # test
@@ -27,7 +33,7 @@ NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)     
 api-server-base-service   ClusterIP   <cluster-ip>    <none>        80/TCP                   7m9s
 ```
 
-## step 2, need replace 
+## step 2
 ```
 # <cluster-ip> in step 1 result
 curl --location --request GET 'http://<cluster-ip>/test/GET'
@@ -108,8 +114,14 @@ curl --location --request GET 'http://<pod-ip>:8080/test/GET'
 ```
 
 ## change log path
-- https://github.com/cool9203/k8s-api-server-base/blob/master/deploy/worker.yaml#L46
-- https://github.com/cool9203/k8s-api-server-base/blob/master/deploy/worker.yaml#L46
+### method 1 : auto change in deploy
+```
+./deploy.sh redeploy <worker-path>
+
+than log path is `<worker-path>/log`
+```
+- https://github.com/cool9203/k8s-api-server-base/blob/master/deploy/worker.yaml#L53
+- https://github.com/cool9203/k8s-api-server-base/blob/master/deploy/worker.yaml#L53
 
 # how to add service to master or worker
 
@@ -121,22 +133,18 @@ add `<name>.py` in [this](https://github.com/cool9203/k8s-api-server-base/tree/m
 add `<name>.py` to [master](https://github.com/cool9203/k8s-api-server-base/blob/master/pkg/api/master.py#L5) or [worker](https://github.com/cool9203/k8s-api-server-base/blob/master/pkg/api/worker.py#L5)
 
 ## step 3
-deploy. [see more](https://hackmd.io/RxWb6x51SR6H3lOaO7Azcg?both#build-and-run)
+deploy. [see more](https://github.com/cool9203/k8s-api-server-base#build-and-run)
 ```sh
-sudo ./run.sh run
-or
-sudo ./deploy.sh redeploy
+sudo ./deploy.sh redeploy <worker-dir>
 ```
 
 ## step 4
-test. [see more](https://hackmd.io/RxWb6x51SR6H3lOaO7Azcg?both#test)
+test. [see more](https://github.com/cool9203/k8s-api-server-base#test)
 
 # change flask run ip and port
-in ./k8s-api-server-base/setting.txt
-if changed, you should change this file too.
-1. https://github.com/cool9203/k8s-api-server-base/blob/master/deploy/worker.yaml#L26
-2. https://github.com/cool9203/k8s-api-server-base/blob/master/deploy/master-svc.yaml#L12
+in ./k8s-api-server-base/master.yaml  
+if changed, you should change this file too.  
+https://github.com/cool9203/k8s-api-server-base/blob/master/deploy/master-svc.yaml#L12
 
 # master call worker service example
-https://github.com/cool9203/k8s-api-server-base/blob/master/pkg/api/test-worker.py#L20-L25  
-if change port, `8080` need edit to changed port.  
+https://github.com/cool9203/k8s-api-server-base/blob/master/pkg/api/test-worker.py#L22-L27  
