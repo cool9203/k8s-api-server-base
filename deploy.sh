@@ -5,7 +5,8 @@ if [[ ($# == 0)  ||  ("$1" != "uninstall" && $# < 2) ]] ; then
   exit
 fi
 
-K8S_DATA_DIR=/etc/api-server-base
+#K8S_DATA_DIR=/etc/api-server-base
+K8S_DATA_DIR=$2
 
 if [ "$1" = "deploy" ]; then
   yq -i ".spec.template.spec.volumes[0].hostPath.path = \"${K8S_DATA_DIR}/log\"" deploy/master.yaml
